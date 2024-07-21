@@ -10,10 +10,7 @@ void setup() {
     my_mav_bridge.init(config::mavlink::serial, config::mavlink::baudrate, config::mavlink::system_id, config::mavlink::component_id, config::mavlink::steering_channel, config::mavlink::throttle_channel, config::mavlink::message_rate);
 }
 void loop(){
-    // my_mav_bridge.run();
-    // my_mav_bridge.set_steering(get_steering());
-    // my_mav_bridge.set_throttle(get_throttle());
-    Serial.print(get_throttle());
-    Serial.print("   ");
-    Serial.println(get_steering());
+    my_mav_bridge.run();
+    my_mav_bridge.set_steering(get_steering());
+    my_mav_bridge.set_throttle(get_throttle());
 }
