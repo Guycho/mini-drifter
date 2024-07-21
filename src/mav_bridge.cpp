@@ -41,7 +41,7 @@ void MavBridge::run()
   }
 }
 
-void MavBridge::set_steering(uint16_t steering_pct)
+void MavBridge::set_steering(int steering_pct)
 {
   // Convert the steering percentage to a PWM value
   uint16_t pwm = map(steering_pct, -100, 100, 1000, 2000);
@@ -50,7 +50,7 @@ void MavBridge::set_steering(uint16_t steering_pct)
   set_servo(m_steering_channel, pwm);
 }
 
-void MavBridge::set_throttle(uint16_t throttle_pct)
+void MavBridge::set_throttle(int throttle_pct)
 {
   // Convert the throttle percentage to a PWM value
   uint16_t pwm = map(throttle_pct, -100, 100, 1000, 2000);

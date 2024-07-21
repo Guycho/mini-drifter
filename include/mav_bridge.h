@@ -13,8 +13,8 @@ public:
     void init(HardwareSerial *serial, uint32_t baudrate, uint8_t system_id, uint8_t component_id, uint8_t steering_channel, uint8_t throttle_channel, uint8_t message_rate);
     void run();
     float get_gyro_data();
-    void set_steering(uint16_t steering_pct);
-    void set_throttle(uint16_t throttle_pct);
+    void set_steering(int steering_pct);
+    void set_throttle(int throttle_pct);
 
 private:
     void set_messages_rates();
