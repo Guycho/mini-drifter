@@ -1,8 +1,8 @@
 #ifndef MAV_BRIDGE_H
 #define MAV_BRIDGE_H
 
+#include <Arduino.h>
 #include <all/mavlink.h>
-#include "config.h"
 
 class MavBridge
 {

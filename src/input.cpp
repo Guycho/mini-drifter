@@ -1,14 +1,28 @@
 #include "input.h"
 
+void on_connect();
+void on_disConnect();
+void controller_do();
+void remove_paired_devices();
+int8_t calc_throttle(int8_t l2, int8_t r2);
+int8_t calc_steering(int8_t lx);
+
 void init(const char* mac) {
     PS4.attach(controller_do);
-    PS4.attachOnConnect(onConnect);
-    PS4.attachOnDisconnect(onDisConnect);
+    PS4.attachOnConnect(on_connect);
+    PS4.attachOnDisconnect(on_disConnect);
     PS4.begin(mac);
-    removePairedDevices();  // This helps to solve connection issues
+    remove_paired_devices();  // This helps to solve connection issues
 }
 
-void removePairedDevices() {
+int8_t get_throttle(){
+    return m_throttle;
+}
+int8_t get_steering(){
+    return m_steering;
+}
+
+void remove_paired_devices() {
     uint8_t pairedDeviceBtAddr[20][6];
     int count = esp_bt_gap_get_bond_device_num();
     esp_bt_gap_get_bond_device_list(&count, pairedDeviceBtAddr);
@@ -35,7 +49,9 @@ void controller_do() {
     int8_t lx = PS4.LStickX(),
            ly = PS4.LStickY(),
            rx = PS4.RStickX(),
-           ry = PS4.RStickY();
+           ry = PS4.RStickY(),
+           l2 = PS4.L2(),
+           r2 = PS4.R2();
 
     int16_t gx = PS4.GyrX(),
             gy = PS4.GyrY(),
@@ -43,22 +59,20 @@ void controller_do() {
             ax = PS4.AccX(),
             ay = PS4.AccY(),
             az = PS4.AccZ();
+    m_throttle = calc_throttle(l2, r2);
+    m_steering = calc_steering(lx);
 }
 
-void printDeviceAddress() {
-    const uint8_t* point = esp_bt_dev_get_address();
-    for (int i = 0; i < 6; i++) {
-        char str[3];
-        sprintf(str, "%02x", (int)point[i]);
-        Serial.print(str);
-        if (i < 5) {
-            Serial.print(":");
-        }
-    }
+int8_t calc_throttle(int8_t l2, int8_t r2) {
+    return map((l2 - r2), 0, 255, -100, 100);
 }
 
-void onConnect() {
+int8_t calc_steering(int8_t lx) {
+    return map(lx, -127, 127, -100, 100);
 }
 
-void onDisConnect() {
+void on_connect() {
+}
+
+void on_disConnect() {
 }

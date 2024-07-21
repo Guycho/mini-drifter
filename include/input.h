@@ -10,6 +10,8 @@
 #include "esp_gap_bt_api.h"
 
 void init(const char* mac);
+int8_t get_throttle();
+int8_t get_steering();
 
 int m_throttle;
 int m_steering;
