@@ -3,7 +3,6 @@
 
 #include <PS4Controller.h>
 
-#include "config.h"
 #include "esp_bt_device.h"
 #include "esp_bt_main.h"
 #include "esp_err.h"
@@ -13,7 +12,5 @@ void init(const char* mac);
 int8_t get_throttle();
 int8_t get_steering();
 
-int m_throttle;
-int m_steering;
 
 #endif  // INPUT_CONTROLLER_H

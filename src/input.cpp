@@ -1,11 +1,15 @@
 #include "input.h"
 
+uint32_t last_time = 0;
 void on_connect();
 void on_disConnect();
 void controller_do();
 void remove_paired_devices();
-int8_t calc_throttle(int8_t l2, int8_t r2);
+int8_t calc_throttle(uint8_t l2, uint8_t r2);
 int8_t calc_steering(int8_t lx);
+
+int8_t m_throttle;
+int8_t m_steering;
 
 void init(const char* mac) {
     PS4.attach(controller_do);
@@ -15,10 +19,10 @@ void init(const char* mac) {
     remove_paired_devices();  // This helps to solve connection issues
 }
 
-int8_t get_throttle(){
+int8_t get_throttle() {
     return m_throttle;
 }
-int8_t get_steering(){
+int8_t get_steering() {
     return m_steering;
 }
 
@@ -49,9 +53,10 @@ void controller_do() {
     int8_t lx = PS4.LStickX(),
            ly = PS4.LStickY(),
            rx = PS4.RStickX(),
-           ry = PS4.RStickY(),
-           l2 = PS4.L2(),
-           r2 = PS4.R2();
+           ry = PS4.RStickY();
+
+    uint8_t l2 = PS4.L2Value(),
+            r2 = PS4.R2Value();
 
     int16_t gx = PS4.GyrX(),
             gy = PS4.GyrY(),
@@ -63,8 +68,8 @@ void controller_do() {
     m_steering = calc_steering(lx);
 }
 
-int8_t calc_throttle(int8_t l2, int8_t r2) {
-    return map((l2 - r2), 0, 255, -100, 100);
+int8_t calc_throttle(uint8_t l2, uint8_t r2) {
+    return map((r2 - l2), -255, 255, -100, 100);
 }
 
 int8_t calc_steering(int8_t lx) {
