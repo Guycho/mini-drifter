@@ -1,6 +1,7 @@
 #ifndef PID_H
 #define PID_H
 
+#include <Arduino.h>
 #include <Chrono.h>
 
 class PID {
@@ -12,15 +13,15 @@ class PID {
     float compute(float set_point, float measured_value);  // Method to compute the PID output
 
    private:
-
+    Chrono print_timer;
     Chrono *m_timer;
     
     float m_kp;  // Proportional coefficient
     float m_ki;  // Integral coefficient
     float m_kd;  // Derivative coefficient
 
-    float m_previous_error;  // Previous error for derivative calculation
-    float m_integral;       // Integral of the error
+    float m_previous_error = 0;  // Previous error for derivative calculation
+    float m_integral = 0;       // Integral of the error
 
     float m_min_integral;  // Minimum integral for anti-windup
     float m_max_integral;  // Maximum integral for anti-windup

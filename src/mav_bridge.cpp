@@ -43,8 +43,6 @@ void MavBridge::run()
 
 void MavBridge::set_steering(int steering_pct)
 {
-    Serial.print("Steering: ");
-    Serial.println(steering_pct);
     // Convert the steering percentage to a PWM value
     uint16_t pwm = map(steering_pct, -100, 100, 1000, 2000);
     pwm = 3000 - pwm;
