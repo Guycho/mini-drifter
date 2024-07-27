@@ -26,6 +26,7 @@ float PID::compute(float set_point, float measured_value) {
 
     // Get the elapsed time in seconds
     float dt = m_timer->elapsed() / 1e6;
+    if(dt == 0) return;
     m_timer->restart();  // Restart the timer for the next iteration
 
     // Update integral term with anti-windup

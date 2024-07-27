@@ -17,9 +17,9 @@ namespace config {
         const char *mac = "A0:DD:6C:03:9A:EE";
     }  // namespace PS4_controller
     namespace PID {
-        const float kp = 0.1;
-        const float ki = 0.01;
-        const float kd = 0.01;
+        const float kp = 1;
+        const float ki = 0.00;
+        const float kd = 0.00;
         const float max_output = 100;
         const float integral_percentage = 30;
         const float low_pass_alpha = 0.1;

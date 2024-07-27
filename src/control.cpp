@@ -18,16 +18,16 @@ void Control::update(float steering_input, float throttle_input) {
     if (m_steering_pid && m_mav_bridge) {
         m_steering_mode = SteeringMode(get_steering_mode());
 
-        float steering_input = steering_input;
-        float throttle_input = throttle_input;
+        float steering_output = steering_input;
+        float throttle_output = throttle_input;
 
         // Compute the PID output
         if (m_steering_mode == SteeringMode::OMEGA) {
             float measured_value = m_mav_bridge->get_gyro_data();
-            steering_input = m_steering_pid->compute(steering_input, measured_value);
-
-            // Apply the output to the steering mechanism
-            m_mav_bridge->set_steering(steering_input);
+            steering_output = m_steering_pid->compute(steering_input, measured_value);
         }
+        // Apply the output to the steering mechanism
+        m_mav_bridge->set_steering(steering_output);
+        m_mav_bridge->set_throttle(throttle_output);
     }
 }
