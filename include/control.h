@@ -2,26 +2,29 @@
 #define CONTROL_H
 
 #include <Chrono.h>
-#include "mav_bridge.h"
-#include "input.h"
+
 #include "PID.h"
+#include "input.h"
+#include "mav_bridge.h"
 
+enum SteeringMode {
+    MANUAL = 0,
+    OMEGA = 1,
+};
 
-class AControl {
+class Control {
    public:
-    AControl();   // Constructor
-    ~AControl();  // Destructor
+    Control();   // Constructor
+    ~Control();  // Destructor
 
-    void initialize(MavBridge *mav_bridge, PID *steering_pid, uint8_t steering_mode);  // Method to initialize control
-    void update();      // Method to update control state
-    void set_steering_mode(uint8_t steering_mode);  // Method to set steering
+    void init(MavBridge *mav_bridge, PID *steering_pid);  // Method to initialize control
+    void update(float steering_input, float throttle_input);                                                      // Method to update control state
+
    private:
-
     Chrono m_timer;
     PID *m_steering_pid;
     MavBridge *m_mav_bridge;  // Pointer to MavBridge object
-    uint8_t m_steering_mode;  // Steering mode
-    
+    SteeringMode m_steering_mode = MANUAL;  // Steering mode
 };
 
 #endif  // CONTROL_H

@@ -11,6 +11,7 @@
 void init(const char* mac);
 int8_t get_throttle();
 int8_t get_steering();
+uint8_t get_steering_mode();
 
 
 #endif  // INPUT_CONTROLLER_H

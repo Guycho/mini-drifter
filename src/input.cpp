@@ -10,6 +10,8 @@ int8_t calc_steering(int8_t lx);
 
 int8_t m_throttle;
 int8_t m_steering;
+uint8_t m_steering_mode;
+
 
 void init(const char* mac) {
     PS4.attach(controller_do);
@@ -24,6 +26,10 @@ int8_t get_throttle() {
 }
 int8_t get_steering() {
     return m_steering;
+}
+
+uint8_t get_steering_mode() {
+    return m_steering_mode;
 }
 
 void remove_paired_devices() {
@@ -64,6 +70,14 @@ void controller_do() {
             ax = PS4.AccX(),
             ay = PS4.AccY(),
             az = PS4.AccZ();
+
+    if(trd) {
+        m_steering_mode = 1;
+    }
+    else if(sqd) {
+        m_steering_mode = 0;
+    }
+
     m_throttle = calc_throttle(l2, r2);
     m_steering = calc_steering(lx);
 }
