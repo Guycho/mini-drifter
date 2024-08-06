@@ -26,7 +26,8 @@ void MavBridge::run()
   mavlink_message_t msg;
   mavlink_status_t status;
 
-  if (m_serial->available() > 0)
+
+  while (m_serial->available() > 0)
   {
     uint8_t c = Serial2.read();
     if (mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status))
@@ -35,24 +36,25 @@ void MavBridge::run()
       {
         mavlink_scaled_imu_t imu;
         mavlink_msg_scaled_imu_decode(&msg, &imu);
-        m_gyro_data = imu.zgyro;
+        m_gyro_data = utils::calcs::milli_to_single(imu.zgyro);
       }
     }
   }
 }
 
-void MavBridge::set_steering(int steering_pct)
+void MavBridge::set_steering(float steering_pct)
 {
+    m_steering_pct = steering_pct;
     // Convert the steering percentage to a PWM value
     uint16_t pwm = map(steering_pct, -100, 100, 1000, 2000);
-    pwm = 3000 - pwm;
     // Set the steering servo
     set_servo(m_steering_channel, pwm);
 
 }
 
-void MavBridge::set_throttle(int throttle_pct)
+void MavBridge::set_throttle(float throttle_pct)
 {
+  m_throttle_pct = throttle_pct;
   // Convert the throttle percentage to a PWM value
   uint16_t pwm = map(throttle_pct, -100, 100, 1000, 2000);
 
@@ -65,6 +67,14 @@ float MavBridge::get_gyro_data()
   return m_gyro_data;
 }
 
+float MavBridge::get_steering_pct()
+{
+  return m_steering_pct;
+}
+float MavBridge::get_throttle_pct()
+{
+  return m_throttle_pct;
+}
 void MavBridge::set_messages_rates()
 {
   set_message_rate(MAVLINK_MSG_ID_SCALED_IMU, m_message_rate);

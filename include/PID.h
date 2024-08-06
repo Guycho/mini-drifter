@@ -13,7 +13,6 @@ class PID {
     float compute(float set_point, float measured_value);  // Method to compute the PID output
 
    private:
-    Chrono print_timer;
     Chrono *m_timer;
     
     float m_kp;  // Proportional coefficient

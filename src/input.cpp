@@ -5,11 +5,11 @@ void on_connect();
 void on_disConnect();
 void controller_do();
 void remove_paired_devices();
-int8_t calc_throttle(uint8_t l2, uint8_t r2);
-int8_t calc_steering(int8_t lx);
+float calc_throttle(uint8_t l2, uint8_t r2);
+float calc_steering(int8_t lx);
 
-int8_t m_throttle;
-int8_t m_steering;
+float m_throttle;
+float m_steering;
 uint8_t m_steering_mode;
 
 
@@ -21,10 +21,10 @@ void init(const char* mac) {
     remove_paired_devices();  // This helps to solve connection issues
 }
 
-int8_t get_throttle() {
+float get_throttle() {
     return m_throttle;
 }
-int8_t get_steering() {
+float get_steering() {
     return m_steering;
 }
 
@@ -82,12 +82,12 @@ void controller_do() {
     m_steering = calc_steering(lx);
 }
 
-int8_t calc_throttle(uint8_t l2, uint8_t r2) {
-    return map((r2 - l2), -255, 255, -100, 100);
+float calc_throttle(uint8_t l2, uint8_t r2) {
+    return utils::calcs::map_float((r2 - l2), -255, 255, -100, 100);
 }
 
-int8_t calc_steering(int8_t lx) {
-    return map(lx, -127, 127, -100, 100);
+float calc_steering(int8_t lx) {
+    return utils::calcs::map_float(lx, -127, 127, -100, 100);
 }
 
 void on_connect() {

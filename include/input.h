@@ -8,9 +8,11 @@
 #include "esp_err.h"
 #include "esp_gap_bt_api.h"
 
+#include "utils.h"
+
 void init(const char* mac);
-int8_t get_throttle();
-int8_t get_steering();
+float get_throttle();
+float get_steering();
 uint8_t get_steering_mode();
 
 

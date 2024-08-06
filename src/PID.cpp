@@ -8,7 +8,6 @@ PID::~PID() {
     // Destructor implementation
 }
 void PID::init(float kp, float ki, float kd, float max_output, float integral_percentage, float low_pass_alpha, float high_Pass_alpha) {
-    print_timer.start();
     m_timer = new Chrono(Chrono::MICROS);
     m_timer->start();
     m_kp = kp;
@@ -53,15 +52,5 @@ float PID::compute(float set_point, float measured_value) {
     if (output > m_max_output) output = m_max_output;
     if (output < m_min_output) output = m_min_output;
 
-    if(print_timer.hasPassed(250), true){
-    Serial.print(set_point);
-    Serial.print(" ");
-    Serial.print(measured_value);
-    Serial.print(" ");
-    Serial.print(m_integral);
-    Serial.print(" ");
-    Serial.print(output);
-    Serial.println();
-        }
             return output;
 }
