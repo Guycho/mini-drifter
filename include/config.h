@@ -22,8 +22,9 @@ namespace config {
         const float kd = 0.01;
         const float max_output = 100;
         const float integral_percentage = 30;
-        const float low_pass_alpha = 0.1;
-        const float high_pass_alpha = 0.1;
+        const float low_pass_alpha = 0.0;
+        const float high_pass_alpha = 0.0;
+        const bool use_filters = false;
     }  // namespace PID
 }
 #endif  // CONFIG_H
