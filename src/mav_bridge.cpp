@@ -26,10 +26,13 @@ void MavBridge::run()
   mavlink_message_t msg;
   mavlink_status_t status;
 
+  uint16_t len = m_serial->available();
+  uint8_t buf[len];
+  m_serial->readBytes(buf, len);
 
-  while (m_serial->available() > 0)
+  for (uint16_t i = 0; i < len; i++)
   {
-    uint8_t c = Serial2.read();
+    uint8_t c = buf[i];
     if (mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status))
     {
       if (msg.msgid == MAVLINK_MSG_ID_SCALED_IMU)
@@ -40,16 +43,16 @@ void MavBridge::run()
       }
     }
   }
+
 }
 
 void MavBridge::set_steering(float steering_pct)
 {
-    m_steering_pct = steering_pct;
-    // Convert the steering percentage to a PWM value
-    uint16_t pwm = map(steering_pct, -100, 100, 1000, 2000);
-    // Set the steering servo
-    set_servo(m_steering_channel, pwm);
-
+  m_steering_pct = steering_pct;
+  // Convert the steering percentage to a PWM value
+  uint16_t pwm = map(steering_pct, -100, 100, 1000, 2000);
+  // Set the steering servo
+  set_servo(m_steering_channel, pwm);
 }
 
 void MavBridge::set_throttle(float throttle_pct)
