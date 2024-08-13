@@ -26,5 +26,10 @@ namespace config {
         const float high_pass_alpha = 0.0;
         const bool use_filters = false;
     }  // namespace PID
+    namespace control {
+        const float gyro_input_max = 2*PI;
+        const float steering_input_max = 100;
+        const float throttle_input_max = 100;
+    }  // namespace control
 }
 #endif  // CONFIG_H

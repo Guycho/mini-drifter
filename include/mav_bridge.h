@@ -36,6 +36,7 @@ private:
     float m_gyro_data;
     float m_steering_pct;
     float m_throttle_pct;
+
 };
 
 #endif // MAV_BRIDGE_H

@@ -31,7 +31,7 @@ void setup() {
     init(config::PS4_controller::mac);
     my_mav_bridge.init(config::mavlink::serial, config::mavlink::baudrate, config::mavlink::system_id, config::mavlink::component_id, config::mavlink::steering_channel, config::mavlink::throttle_channel, config::mavlink::message_rate);
     my_steering_pid.init(config::PID::kp, config::PID::ki, config::PID::kd, config::PID::max_output, config::PID::integral_percentage, config::PID::low_pass_alpha, config::PID::high_pass_alpha, config::PID::use_filters);
-    my_control.init(&my_mav_bridge, &my_steering_pid);
+    my_control.init(&my_mav_bridge, &my_steering_pid, config::control::gyro_input_max, config::control::steering_input_max, config::control::throttle_input_max);
 }
 void loop(){
 #ifdef DEBUG
