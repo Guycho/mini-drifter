@@ -15,6 +15,7 @@ namespace config {
     }  // namespace mavlink
     namespace PS4_controller {
         const char *mac = "A0:DD:6C:03:9A:EE";
+        const float dead_band = 5;
     }  // namespace PS4_controller
     namespace PID {
         const float kp = 1;

@@ -19,11 +19,14 @@ public:
     void set_throttle(float throttle_pct);
     float get_steering_pct();
     float get_throttle_pct();
+    bool get_arm_state();
+    void toggle_arm();
 
-private:
+   private:
     void set_messages_rates();
     void set_message_rate(uint32_t msg_id, uint16_t message_rate_hz);
     void set_servo(uint8_t channel, uint16_t pwm);
+    void set_arm(int arm);
 
     HardwareSerial *m_serial;
     uint32_t m_baudrate;
@@ -36,6 +39,9 @@ private:
     float m_gyro_data;
     float m_steering_pct;
     float m_throttle_pct;
+
+    int m_arm_state = false;
+    int m_requested_arm_state = false;
 
 };
 
