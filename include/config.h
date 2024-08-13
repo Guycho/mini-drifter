@@ -9,8 +9,8 @@ namespace config {
         const uint32_t baudrate = 500000;
         const uint8_t system_id = 1;
         const uint8_t component_id = 0;
-        const uint8_t steering_channel = 8;
-        const uint8_t throttle_channel = 7;
+        const uint8_t steering_channel = 12;
+        const uint8_t throttle_channel = 5;
         const uint8_t message_rate = 100;
     }  // namespace mavlink
     namespace PS4_controller {
