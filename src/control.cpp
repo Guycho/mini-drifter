@@ -10,8 +10,6 @@ Control::~Control() {
 void Control::init(MavBridge *mav_bridge, PID *steering_pid, float gyro_input_max,
   float steering_input_max, float throttle_input_max) {
     // Method to initialize control
-    m_last_loop_timer = new Chrono(Chrono::MICROS);
-    m_last_loop_timer->start();
     m_mav_bridge = mav_bridge;
     m_steering_pid = steering_pid;
     m_gyro_input_max = gyro_input_max;
@@ -24,7 +22,7 @@ void Control::init(MavBridge *mav_bridge, PID *steering_pid, float gyro_input_ma
 
 void Control::update() {
     // Update control state
-    m_last_loop_timer->restart();
+    m_mav_bridge->run();
     if (m_steering_pid && m_mav_bridge) {
         // Get the steering mode
         if (get_steering_mode_toggle()) {
@@ -53,8 +51,4 @@ void Control::update() {
         m_mav_bridge->set_steering(steering_output);
         m_mav_bridge->set_throttle(throttle_output);
     }
-    m_last_loop_time = m_last_loop_timer->elapsed();
 }
-
-uint32_t Control::get_last_loop_time() { return m_last_loop_time; }
-bool Control::get_steering_mode() { return m_steering_mode; }

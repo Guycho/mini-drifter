@@ -7,7 +7,7 @@
 #include "input.h"
 #include "mav_bridge.h"
 
-Chrono print_timer;
+// Chrono print_timer;
 
 MavBridge my_mav_bridge;
 Control my_control;
@@ -27,7 +27,6 @@ void setup() {
       config::control::steering_input_max, config::control::throttle_input_max);
 }
 void loop() {
-    my_mav_bridge.run();
     my_control.update();
     // if (print_timer.hasPassed(250, true)) {
     //     Serial.printf(" armed: %d", my_mav_bridge.get_arm_state());
