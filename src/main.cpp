@@ -7,7 +7,7 @@
 #include "input.h"
 #include "mav_bridge.h"
 
-// Chrono print_timer;
+Chrono print_timer;
 
 MavBridge my_mav_bridge;
 Control my_control;
@@ -29,7 +29,13 @@ void setup() {
 void loop() {
     my_control.update();
     // if (print_timer.hasPassed(250, true)) {
-    //     Serial.printf(" armed: %d", my_mav_bridge.get_arm_state());
+    //     float set_point, measured_value, kp_v, ki_v, kd_v, dt, error, integral;
+    //     my_steering_pid.get_values(set_point, measured_value, kp_v, ki_v, kd_v, dt, error,
+    //       integral);
+    //     Serial.printf(
+    //       "set_point: %f, measured_value: %f, kp: %f, ki: %f, kd: %f, dt: %f, error: %f, integral: "
+    //       "%f",
+    //       set_point, measured_value, kp_v, ki_v, kd_v, dt, error, integral);
     //     Serial.println();
     // }
 }

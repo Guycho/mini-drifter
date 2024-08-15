@@ -18,7 +18,7 @@ namespace config {
         const float dead_band = 5;
     }  // namespace PS4_controller
     namespace PID {
-        const float kp = 1;
+        const float kp = 5;
         const float ki = 0.01;
         const float kd = 0.01;
         const float max_output = 100;

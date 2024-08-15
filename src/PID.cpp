@@ -27,7 +27,9 @@ void PID::init(float kp, float ki, float kd, float max_output, float integral_pe
 
 float PID::compute(float set_point, float measured_value)
 {
-    m_error = set_point - measured_value;
+    m_set_point = set_point;
+    m_measured_value = measured_value;
+    m_error = m_set_point - m_measured_value;
 
     // Get the elapsed time in seconds
     m_dt = m_timer->elapsed() / 1e6;
@@ -73,8 +75,10 @@ float PID::compute(float set_point, float measured_value)
     return output;
 }
 
-void PID::get_values(float &kp_v, float &ki_v, float &kd_v, float &dt, float &error, float &integral)
+void PID::get_values(float &set_point, float &measured_value, float &kp_v, float &ki_v, float &kd_v, float &dt, float &error, float &integral)
 {
+    set_point = m_set_point;
+    measured_value = m_measured_value;
     kp_v = m_kp_v;
     ki_v = m_ki_v;
     kd_v = m_kd_v;

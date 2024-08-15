@@ -22,8 +22,8 @@ void Control::init(MavBridge *mav_bridge, PID *steering_pid, float gyro_input_ma
 
 void Control::update() {
     // Update control state
-    m_mav_bridge->run();
     if (m_steering_pid && m_mav_bridge) {
+        m_mav_bridge->run();
         // Get the steering mode
         if (get_steering_mode_toggle()) {
             m_steering_mode = !m_steering_mode;

@@ -12,14 +12,18 @@ public:
 
     void init(float kp, float ki, float kd, float max_output, float integral_percentage, float low_pass_alpha, float high_Pass_alpha, bool use_filters);
     float compute(float set_point, float measured_value); // Method to compute the PID output
-    void get_values(float &kp_v, float &ki_v, float &kd_v, float &dt, float &error, float &integral);
+    void get_values(float &set_point, float &measured_value, float &kp_v, float &ki_v, float &kd_v,
+      float &dt, float &error, float &integral);
 
-private:
+   private:
     Chrono *m_timer;
 
     float m_kp; // Proportional coefficient
     float m_ki; // Integral coefficient
     float m_kd; // Derivative coefficient
+
+    float m_set_point;  // Set point value
+    float m_measured_value;  // Measured value
 
     float m_dt; // Time step
 
