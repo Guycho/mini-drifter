@@ -12,6 +12,8 @@ public:
 
     void init(float kp, float ki, float kd, float max_output, float integral_percentage, float low_pass_alpha, float high_Pass_alpha, bool use_filters);
     float compute(float set_point, float measured_value); // Method to compute the PID output
+    void reset_pid(); // Method to reset the PID controller
+    void enable_integral(bool enable); // Method to enable/disable the integral term
     void get_values(float &set_point, float &measured_value, float &kp_v, float &ki_v, float &kd_v,
       float &dt, float &error, float &integral);
 
@@ -31,6 +33,8 @@ public:
     float m_previous_error = 0; // Previous error for derivative calculation
     float m_integral = 0;       // Integral of the error
 
+    bool m_enable_integral; // Enable/disable the integral term
+    
     float m_min_integral; // Minimum integral for anti-windup
     float m_max_integral; // Maximum integral for anti-windup
 

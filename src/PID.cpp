@@ -1,16 +1,14 @@
 #include "PID.h"
 
-PID::PID()
-{
+PID::PID() {
     // Constructor implementation
 }
 
-PID::~PID()
-{
+PID::~PID() {
     // Destructor implementation
 }
-void PID::init(float kp, float ki, float kd, float max_output, float integral_percentage, float low_pass_alpha, float high_Pass_alpha, bool use_filters)
-{
+void PID::init(float kp, float ki, float kd, float max_output, float integral_percentage,
+  float low_pass_alpha, float high_Pass_alpha, bool use_filters) {
     m_timer = new Chrono(Chrono::MICROS);
     m_timer->start();
     m_kp = kp;
@@ -25,31 +23,28 @@ void PID::init(float kp, float ki, float kd, float max_output, float integral_pe
     m_use_filters = use_filters;
 }
 
-float PID::compute(float set_point, float measured_value)
-{
+float PID::compute(float set_point, float measured_value) {
     m_set_point = set_point;
     m_measured_value = measured_value;
     m_error = m_set_point - m_measured_value;
 
     // Get the elapsed time in seconds
     m_dt = m_timer->elapsed() / 1e6;
-    m_timer->restart(); // Restart the timer for the next iteration
+    m_timer->restart();  // Restart the timer for the next iteration
 
     // Update integral term with anti-windup
-    m_integral += m_error * m_dt;
-    if (m_integral > m_max_integral)
-        m_integral = m_max_integral;
-    if (m_integral < m_min_integral)
-        m_integral = m_min_integral;
-
+    if (m_enable_integral == true) {
+        m_integral += m_error * m_dt;
+        if (m_integral > m_max_integral) m_integral = m_max_integral;
+        if (m_integral < m_min_integral) m_integral = m_min_integral;
+    }
     // Calculate derivative term
     float derivative = (m_error - m_previous_error) / m_dt;
     m_previous_error = m_error;
 
     // Apply high-pass filter to the input
     float filtered_input = 0;
-    if (m_use_filters == true)
-    {
+    if (m_use_filters == true) {
         filtered_input = m_high_pass_alpha * (measured_value - m_previous_input);
         m_previous_input = measured_value;
     }
@@ -61,22 +56,28 @@ float PID::compute(float set_point, float measured_value)
     float output = m_kp_v + m_ki_v + m_kd_v + filtered_input;
 
     // Apply low-pass filter to the output
-    if (m_use_filters == true)
-    {
+    if (m_use_filters == true) {
         output = m_low_pass_alpha * output + (1 - m_low_pass_alpha) * m_previous_output;
         m_previous_output = output;
     }
     // Clamp the final output
-    if (output > m_max_output)
-        output = m_max_output;
-    if (output < m_min_output)
-        output = m_min_output;
+    if (output > m_max_output) output = m_max_output;
+    if (output < m_min_output) output = m_min_output;
 
     return output;
 }
 
-void PID::get_values(float &set_point, float &measured_value, float &kp_v, float &ki_v, float &kd_v, float &dt, float &error, float &integral)
-{
+void PID::enable_integral(bool enable) { m_enable_integral = enable; }
+
+void PID::reset_pid() {
+    m_integral = 0;
+    m_previous_error = 0;
+    m_previous_output = 0;
+    m_previous_input = 0;
+}
+
+void PID::get_values(float &set_point, float &measured_value, float &kp_v, float &ki_v, float &kd_v,
+  float &dt, float &error, float &integral) {
     set_point = m_set_point;
     measured_value = m_measured_value;
     kp_v = m_kp_v;

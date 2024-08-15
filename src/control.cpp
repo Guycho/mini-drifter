@@ -34,6 +34,7 @@ void Control::update() {
         if (m_mav_bridge->get_arm_state() == false) {
             m_mav_bridge->set_steering(0);
             m_mav_bridge->set_throttle(0);
+            m_steering_pid->reset_pid();
             return;
         }
         float steering_input = get_steering();
@@ -43,9 +44,17 @@ void Control::update() {
 
         // Compute the PID output
         if (m_steering_mode == OMEGA) {
+            if (throttle_output == 0){
+                m_steering_pid->enable_integral(false);
+            }
+            else {
+                m_steering_pid->enable_integral(true);
+            }
             float measured_value = utils::calcs::map_float(m_mav_bridge->get_gyro_data(),
               m_gyro_input_min, m_gyro_input_max, -100, 100);
             steering_output = m_steering_pid->compute(steering_input, measured_value);
+        } else {
+            m_steering_pid->reset_pid();
         }
         // Apply the output to the steering mechanism
         m_mav_bridge->set_steering(steering_output);
