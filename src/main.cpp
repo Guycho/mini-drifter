@@ -13,6 +13,8 @@ MavBridge my_mav_bridge;
 Control my_control;
 PID my_steering_pid;
 
+void print_data();
+
 void setup() {
     Serial.begin(9600);
     print_timer.start();
@@ -28,14 +30,20 @@ void setup() {
 }
 void loop() {
     my_control.update();
-    // if (print_timer.hasPassed(250, true)) {
-    //     float set_point, measured_value, kp_v, ki_v, kd_v, dt, error, integral;
-    //     my_steering_pid.get_values(set_point, measured_value, kp_v, ki_v, kd_v, dt, error,
-    //       integral);
-    //     Serial.printf(
-    //       "set_point: %f, measured_value: %f, kp: %f, ki: %f, kd: %f, dt: %f, error: %f, integral: "
-    //       "%f",
-    //       set_point, measured_value, kp_v, ki_v, kd_v, dt, error, integral);
-    //     Serial.println();
-    // }
+#ifdef DEBUG
+    print_data();
+#endif
+}
+
+void print_data() {
+    if (print_timer.hasPassed(250, true)) {
+        float set_point, measured_value, kp_v, ki_v, kd_v, dt, error, integral;
+        my_steering_pid.get_values(set_point, measured_value, kp_v, ki_v, kd_v, dt, error,
+          integral);
+        Serial.printf(
+          "set_point: %f, measured_value: %f, kp: %f, ki: %f, kd: %f, dt: %f, error: %f, integral: "
+          "%f",
+          set_point, measured_value, kp_v, ki_v, kd_v, dt, error, integral);
+        Serial.println();
+    }
 }

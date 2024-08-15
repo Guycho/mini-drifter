@@ -11,6 +11,8 @@ float m_throttle;
 float m_steering;
 bool m_steering_mode_toggle;
 bool m_arm_toggle;
+float steering_trim_dir;
+
 uint8_t m_dead_band;
 
 void init_ps4(const char* mac, float dead_band) {
@@ -37,6 +39,10 @@ bool get_arm_toggle() {
     return temp;
 }
 
+float get_steering_trim() {
+    return steering_trim_dir;
+}
+
 void remove_paired_devices() {
     uint8_t pairedDeviceBtAddr[20][6];
     int count = esp_bt_gap_get_bond_device_num();
@@ -50,7 +56,9 @@ void controller_do() {
     boolean sqd = PS4.event.button_down.square, squ = PS4.event.button_up.square,
             trd = PS4.event.button_down.triangle, tru = PS4.event.button_up.triangle,
             crd = PS4.event.button_down.cross, cru = PS4.event.button_up.cross,
-            cid = PS4.event.button_down.circle, ciu = PS4.event.button_up.circle;
+            cid = PS4.event.button_down.circle, ciu = PS4.event.button_up.circle,
+            upd = PS4.event.button_down.up, rid = PS4.event.button_down.right,
+            dod = PS4.event.button_down.down, lid = PS4.event.button_down.left;
 
     boolean sq = PS4.Square(), tr = PS4.Triangle(), cr = PS4.Cross(), ci = PS4.Circle();
 
@@ -68,6 +76,14 @@ void controller_do() {
     if (crd) {
         m_arm_toggle = true;
     }
+
+    if (rid) {
+        steering_trim_dir = 1;
+    }
+    else if (lid) {
+        steering_trim_dir = -1;
+    }
+
     m_throttle = calc_throttle(l2, r2);
     m_steering = calc_steering(lx);
 }

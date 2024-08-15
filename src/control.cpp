@@ -9,6 +9,7 @@ Control::~Control() {
 
 void Control::init(MavBridge *mav_bridge, PID *steering_pid, float gyro_input_max,
   float steering_input_max, float throttle_input_max) {
+    init_eeprom();
     // Method to initialize control
     m_mav_bridge = mav_bridge;
     m_steering_pid = steering_pid;
@@ -30,6 +31,7 @@ void Control::update() {
         }
         if (get_arm_toggle()) {
             m_mav_bridge->toggle_arm();
+            save_steering_trim_to_eeprom();
         }
         if (m_mav_bridge->get_arm_state() == false) {
             m_mav_bridge->set_steering(0);
@@ -37,17 +39,16 @@ void Control::update() {
             m_steering_pid->reset_pid();
             return;
         }
-        float steering_input = get_steering();
+        float steering_input = get_steering() + m_steering_trim;
         float throttle_input = get_throttle();
         float steering_output = steering_input;
         float throttle_output = throttle_input;
 
         // Compute the PID output
         if (m_steering_mode == OMEGA) {
-            if (throttle_output == 0){
+            if (throttle_output == 0) {
                 m_steering_pid->enable_integral(false);
-            }
-            else {
+            } else {
                 m_steering_pid->enable_integral(true);
             }
             float measured_value = utils::calcs::map_float(m_mav_bridge->get_gyro_data(),
@@ -60,4 +61,34 @@ void Control::update() {
         m_mav_bridge->set_steering(steering_output);
         m_mav_bridge->set_throttle(throttle_output);
     }
+}
+
+void Control::trim_steering() {
+    // Trim the steering mechanism
+    if (get_steering_trim() == 1) {
+        m_steering_trim += 1;
+    } else if (get_steering_trim() == -1) {
+        m_steering_trim -= 1;
+    }
+}
+
+void Control::save_steering_trim_to_eeprom() {
+    // Save the steering trim to EEPROM
+    float temp = get_steering_trim();
+    if (m_steering_trim != temp) {
+        EEPROM.put(STEERING_TRIM_ADDR, m_steering_trim);
+        EEPROM.commit();  // Ensure data is written to EEPROM
+    }
+}
+
+float Control::get_steering_trim_from_eeprom() {
+    float temp;
+    EEPROM.get(STEERING_TRIM_ADDR, temp);
+    return temp;
+}
+
+void Control::init_eeprom() {
+    EEPROM.begin(512);
+    m_steering_trim = get_steering_trim_from_eeprom();
+    EEPROM.end();
 }
