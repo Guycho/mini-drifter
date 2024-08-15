@@ -39,8 +39,9 @@ bool get_arm_toggle() {
     return temp;
 }
 
-float get_steering_trim() {
-    return steering_trim_dir;
+float get_steering_trim_from_input() { float temp = steering_trim_dir;
+    steering_trim_dir = 0;
+    return temp;
 }
 
 void remove_paired_devices() {

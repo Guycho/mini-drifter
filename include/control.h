@@ -18,6 +18,7 @@ public:
 
     void init(MavBridge * mav_bridge, PID *steering_pid, float gyro_input_max, float steering_input_max, float throttle_input_max); // Method to initialize control
     void update();
+    float get_steering_trim();
 
 private:
 
@@ -34,7 +35,7 @@ private:
     float m_steering_input_min;
     float m_throttle_input_max;
     float m_throttle_input_min;
-    float m_steering_trim;
+    float m_steering_trim = 0;
 
     const bool OMEGA = true;
     const bool NORMAL = false;

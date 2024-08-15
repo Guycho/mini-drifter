@@ -44,6 +44,7 @@ void print_data() {
           "set_point: %f, measured_value: %f, kp: %f, ki: %f, kd: %f, dt: %f, error: %f, integral: "
           "%f",
           set_point, measured_value, kp_v, ki_v, kd_v, dt, error, integral);
+          Serial.printf(" steering_trim: %f", my_control.get_steering_trim());
         Serial.println();
     }
 }

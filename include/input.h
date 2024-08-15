@@ -14,7 +14,7 @@ float get_throttle();
 float get_steering();
 bool get_steering_mode_toggle();
 bool get_arm_toggle();
-float get_steering_trim();
+float get_steering_trim_from_input();
 
 
 #endif  // INPUT_CONTROLLER_H
