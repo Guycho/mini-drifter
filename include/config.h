@@ -11,7 +11,7 @@ namespace config {
         const uint8_t component_id = 0;
         const uint8_t steering_channel = 12;
         const uint8_t throttle_channel = 5;
-        const uint8_t message_rate = 100;
+        const uint8_t message_rate = 250;
     }  // namespace mavlink
     namespace PS4_controller {
         const char *mac = "A0:DD:6C:03:9A:EE";
